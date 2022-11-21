@@ -60,7 +60,10 @@ export class ParkingController {
       throw new BadRequestException();
     try {
       if (color) return this.parkingService.getSlotsByColor(color);
-      else return this.parkingService.getSlotByRegNumber(regNumber);
+      else
+        return {
+          slotNumber: this.parkingService.getSlotByRegNumber(regNumber),
+        };
     } catch (e) {
       return { error: e.message };
     }
