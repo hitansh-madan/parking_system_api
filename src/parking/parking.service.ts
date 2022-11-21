@@ -68,7 +68,7 @@ export class ParkingService {
 
   getRegNumbersByColor(color: string): Array<string> {
     const regNumbers = [];
-    this.colorToTicket.get(color).forEach((ticketId) => {
+    this.colorToTicket.get(color)?.forEach((ticketId) => {
       regNumbers.push(this.ticketToCar.get(ticketId).regNumber);
     });
     return regNumbers;
@@ -76,7 +76,7 @@ export class ParkingService {
 
   getSlotsByColor(color: string): Array<number> {
     const slots = [];
-    this.colorToTicket.get(color).forEach((ticketId) => {
+    this.colorToTicket.get(color)?.forEach((ticketId) => {
       slots.push(this.ticketToCar.get(ticketId).slot);
     });
     return slots;
@@ -86,7 +86,7 @@ export class ParkingService {
     if (!this.regNumberToTicket.has(regNumber)) {
       throw new Error('Car with given registration number not parked in lot.');
     }
-    return this.ticketToCar.get(this.regNumberToTicket.get(regNumber)).slot;
+    return this.ticketToCar.get(this.regNumberToTicket.get(regNumber))?.slot;
   }
 
   freeSlot(slot: number): number;
