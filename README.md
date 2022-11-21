@@ -1,31 +1,3 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
-
-## Description
-
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
-
 ## Installation
 
 ```bash
@@ -38,36 +10,140 @@ $ npm install
 # development
 $ npm run start
 
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
+## API Description
 
-## Test
+#### Initialize
 
-```bash
-# unit tests
-$ npm run test
+`POST /parking/`
 
-# e2e tests
-$ npm run test:e2e
+    {
+	    "numberOfSlots" : 2
+    }
+    
+##### Response
 
-# test coverage
-$ npm run test:cov
-```
+    {
+	    "totalSlots": 2
+    }
 
-## Support
+#### Add slots
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+`PATCH /parking/`
 
-## Stay in touch
+    {
+	    "numberOfSlots" : 2
+    }
+    
+##### Response
 
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    {
+	    "totalSlots": 4
+    }
 
-## License
+#### Park a car
 
-Nest is [MIT licensed](LICENSE).
+`POST /parking/park`
+
+    {
+      "regNumber" : "UP80AA1001",
+      "color" : "red"
+    }
+    
+##### Response
+
+    {
+      "allocatedSlot": 2,
+      "ticketId": "00000002"
+    }
+
+#### Get registration numbers of all cars of a color
+
+`GET /parking/registration-numbers?color=red`
+
+##### Response
+    [
+      "UP80AA1001",
+      "UP80AA1003"
+    ]
+    
+
+#### Get slot numbers occupied by all cars of a color
+
+`GET /parking/slot-numbers?color=red`
+
+##### Response
+    [
+      2,
+      3
+    ]
+
+
+#### Get slot number occupied by car with given registration number
+
+`GET /parking/slot-numbers?regNumber=UP80AA1003`
+
+##### Response
+    {
+      "slotNumber":2
+    }
+    
+    
+#### Free slot by slot number
+
+`POST /parking/clear`
+
+    {
+	    "slotNumber" : 2
+    }
+    
+##### Response
+
+    {
+	    "freedSlot": 2
+    }
+
+#### Free slot by registration number
+
+`POST /parking/clear`
+
+    {
+	    "regNumber" : "UP80AA1004"
+    }
+    
+##### Response
+
+    {
+	    "freedSlot": 3
+    }
+    
+    
+#### Get all occupied slots
+
+`GET /parking/status`
+    
+##### Response
+
+    [
+      {
+        "regNumber": "UP80AA0003",
+        "color": "c3",
+        "slot": 3
+      },
+      {
+        "regNumber": "UP80AA0004",
+        "color": "c4",
+        "slot": 4
+      },
+      {
+        "regNumber": "UP80AA0005",
+        "color": "c3",
+        "slot": 1
+      },
+      {
+        "regNumber": "UP80AA0006",
+        "color": "c4",
+        "slot": 2
+      }
+    ]
+
